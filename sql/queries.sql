@@ -12,11 +12,11 @@
 -- ----------------------------------------------------------------------------
 
 -- 1.1. Ручная вставка товара "Яблоки"
-INSERT INTO Products (Name, Description, Category, Price, SKU)
+INSERT OR IGNORE INTO Products (Name, Description, Category, Price, SKU)
 VALUES ('Яблоки', 'Свежие яблоки, 1 кг', 'Продукты', 500.00, 'ART-99999-A');
 
 -- 1.2. Ручная вставка товара "Бананы"
-INSERT INTO Products (Name, Description, Category, Price, SKU)
+INSERT OR IGNORE INTO Products (Name, Description, Category, Price, SKU)
 VALUES ('Бананы', 'Спелые бананы, 1 кг', 'Продукты', 120.50, 'ART-99998-B');
 
 -- 1.3. Ручная вставка заказа на товар ID=1
@@ -24,7 +24,7 @@ INSERT INTO Orders (Product_ID, Quantity, Order_Date)
 VALUES (1, 5, '2024-05-15');
 
 -- 1.4. Массовая вставка нескольких товаров
-INSERT INTO Products (Name, Description, Category, Price, SKU)
+INSERT OR IGNORE INTO Products (Name, Description, Category, Price, SKU)
 VALUES 
     ('Молоко', 'Свежее молоко 3.2%, 1 л', 'Продукты', 89.90, 'ART-99997-C'),
     ('Хлеб', 'Белый хлеб, 400 г', 'Продукты', 45.00, 'ART-99996-D'),
