@@ -12,11 +12,11 @@
 -- ----------------------------------------------------------------------------
 
 -- 1.1. Ручная вставка товара "Яблоки"
-INSERT OR IGNORE INTO Products (Name, Description, Category, Price, SKU)
+INSERT INTO Products (Name, Description, Category, Price, SKU)
 VALUES ('Яблоки', 'Свежие яблоки, 1 кг', 'Продукты', 500.00, 'ART-99999-A');
 
 -- 1.2. Ручная вставка товара "Бананы"
-INSERT OR IGNORE INTO Products (Name, Description, Category, Price, SKU)
+INSERT INTO Products (Name, Description, Category, Price, SKU)
 VALUES ('Бананы', 'Спелые бананы, 1 кг', 'Продукты', 120.50, 'ART-99998-B');
 
 -- 1.3. Ручная вставка заказа на товар ID=1
@@ -24,7 +24,7 @@ INSERT INTO Orders (Product_ID, Quantity, Order_Date)
 VALUES (1, 5, '2024-05-15');
 
 -- 1.4. Массовая вставка нескольких товаров
-INSERT OR IGNORE INTO Products (Name, Description, Category, Price, SKU)
+INSERT INTO Products (Name, Description, Category, Price, SKU)
 VALUES 
     ('Молоко', 'Свежее молоко 3.2%, 1 л', 'Продукты', 89.90, 'ART-99997-C'),
     ('Хлеб', 'Белый хлеб, 400 г', 'Продукты', 45.00, 'ART-99996-D'),
@@ -103,7 +103,7 @@ FROM Products
 GROUP BY Category
 HAVING COUNT(*) > 5;
 
--- 5.2. Статистика заказов по товарам
+-- 5.2. Статистика заказов по товарам, заказанным более 3-х раз
 SELECT 
     Product_ID,
     COUNT(*) AS order_count,
@@ -145,12 +145,8 @@ WHERE Category LIKE '%Книг%';
 -- 6.3. Товары с артикулом ART-99XXX
 SELECT Name, SKU, Price
 FROM Products
-WHERE SKU LIKE 'ART-99___';
+WHERE SKU LIKE 'ART-99%';
 
--- 6.4. Товары, описание которых содержит "качество"
-SELECT Name, Description
-FROM Products
-WHERE UPPER(Description) LIKE '%КАЧЕСТВ%';
 
 -- ----------------------------------------------------------------------------
 -- JOIN: сводная выборка заказов с названием товара
@@ -259,7 +255,7 @@ SELECT Name, Price, Category
 FROM Products
 WHERE Price > (SELECT AVG(Price) FROM Products);
 
--- 8.2. ХAVING с несколькими условиями
+-- 8.2. HAVING с несколькими условиями
 SELECT 
     Category,
     COUNT(*) AS count,
@@ -268,7 +264,7 @@ FROM Products
 GROUP BY Category
 HAVING COUNT(*) > 5 AND AVG(Price) > 10000;
 
--- 8.3. Сложный JOIN с агрегацией
+-- 8.3. LEFT JOIN с агрегацией
 SELECT 
     p.Category,
     p.Name AS product_name,
@@ -277,15 +273,10 @@ SELECT
     SUM(o.Quantity) AS sold
 FROM Products p
 LEFT JOIN Orders o ON p.ID = o.Product_ID
-GROUP BY p.ID, p.Name, p.Category, p.Price
+GROUP BY p.Category, p.Name , p.Price
 HAVING COUNT(o.ID) > 0
 ORDER BY sold DESC;
 
--- 8.4. Поиск с multiple LIKE conditions
-SELECT Name, Description
-FROM Products
-WHERE UPPER(Name) LIKE '%КЛАВ%'  -- Изменён шаблон, так как "КНИГ" нет в названиях
-   OR UPPER(Description) LIKE '%КАЧЕСТВ%';
 
 -- ============================================================================
 -- КОНЕЦ ФАЙЛА
